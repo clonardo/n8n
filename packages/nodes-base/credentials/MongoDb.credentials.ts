@@ -41,5 +41,23 @@ export class MongoDb implements ICredentialType {
 			type: 'number' as NodePropertyTypes,
 			default: 27017,
 		},
+		{
+			displayName: 'User',
+			name: 'user',
+			type: 'string' as NodePropertyTypes,
+			default: '',
+		},
+		{
+			displayName: 'Conn string override',
+			name: 'connStringOverrideVal',
+			type: 'string'  as NodePropertyTypes,
+			typeOptions: {
+				rows: 1
+			},
+			default: '',
+			placeholder: `mongodb://USERNAMEHERE:PASSWORDHERE@localhost:27017/?authSource=admin&readPreference=primary&appname=n8n&ssl=false`,
+			required: false,
+			description: `If provided, the value here will be used as a MongoDB connection string, and the MongoDB credentials will be ignored`
+		}
 	];
 }

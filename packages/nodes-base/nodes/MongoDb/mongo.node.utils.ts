@@ -5,6 +5,16 @@ import {
 } from 'n8n-workflow';
 
 /**
+ * Build mongoDb connection string.
+ * If a connection string override value is provided, that will be used in place of individual args
+ *
+ * @param {ICredentialDataDecryptedObject} credentials MongoDB credentials to use, unless conn string is overridden
+ */
+export function validateConnStringOverride(credentials: ICredentialDataDecryptedObject){
+
+}
+
+/**
  * Standard way of building the MongoDB connection string, unless overridden with a provided string
  *
  * @param {ICredentialDataDecryptedObject} credentials MongoDB credentials to use, unless conn string is overridden

@@ -3,7 +3,7 @@ import {
 	IDataObject,
 	INodeExecutionData,
 	INodeType,
-	INodeTypeDescription
+	INodeTypeDescription,
 } from 'n8n-workflow';
 import { nodeDescription } from './mongo.node.options';
 import { MongoClient } from 'mongodb';
@@ -11,26 +11,25 @@ import { getItemCopy, buildParameterizedConnString } from './mongo.node.utils';
 
 export class MongoDb implements INodeType {
 	description: INodeTypeDescription = nodeDescription;
-
+	
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const credentials = this.getCredentials('mongoDb');
-
-		// user can optionally override connection string
-		const useOverriddenConnString = this.getNodeParameter(
-			'shouldOverrideConnString',
-			0
-		) as boolean;
 
 		if (credentials === undefined) {
 			throw new Error('No credentials got returned!');
 		}
 
+		// user can optionally override connection string
+		const connStringOverrideInput = credentials.connStringOverrideVal as string|undefined;
+
+		const useOverriddenConnString = this.getNodeParameter(
+			'connStringOverrideVal',
+			0
+		) as string;
+
 		let connectionUri = '';
 		if (useOverriddenConnString === true) {
-			const connStringInput = this.getNodeParameter(
-				'connStringOverrideVal',
-				0
-			) as string;
+			
 			if (connStringInput && connStringInput.length > 0) {
 				connectionUri = connStringInput;
 			} else {
@@ -44,7 +43,7 @@ export class MongoDb implements INodeType {
 
 		const client: MongoClient = await MongoClient.connect(connectionUri, {
 			useNewUrlParser: true,
-			useUnifiedTopology: true
+			useUnifiedTopology: true,
 		});
 
 		const mdb = client.db(credentials.database as string);
@@ -73,8 +72,8 @@ export class MongoDb implements INodeType {
 			// Prepare the data to insert and copy it to be returned
 			const fields = (this.getNodeParameter('fields', 0) as string)
 				.split(',')
-				.map(f => f.trim())
-				.filter(f => !!f);
+				.map((f) => f.trim())
+				.filter((f) => !!f);
 
 			const insertItems = getItemCopy(items, fields);
 
@@ -87,8 +86,8 @@ export class MongoDb implements INodeType {
 				returnItems.push({
 					json: {
 						...insertItems[parseInt(i, 10)],
-						id: insertedIds[parseInt(i, 10)] as string
-					}
+						id: insertedIds[parseInt(i, 10)] as string,
+					},
 				});
 			}
 		} else if (operation === 'update') {
@@ -98,8 +97,8 @@ export class MongoDb implements INodeType {
 
 			const fields = (this.getNodeParameter('fields', 0) as string)
 				.split(',')
-				.map(f => f.trim())
-				.filter(f => !!f);
+				.map((f) => f.trim())
+				.filter((f) => !!f);
 
 			let updateKey = this.getNodeParameter('updateKey', 0) as string;
 			updateKey = updateKey.trim();
