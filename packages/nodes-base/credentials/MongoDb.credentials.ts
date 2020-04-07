@@ -1,8 +1,4 @@
-import {
-	ICredentialType,
-	NodePropertyTypes,
-} from 'n8n-workflow';
-
+import { ICredentialType, NodePropertyTypes } from 'n8n-workflow';
 
 export class MongoDb implements ICredentialType {
 	name = 'mongoDb';
@@ -12,45 +8,50 @@ export class MongoDb implements ICredentialType {
 			displayName: 'Host',
 			name: 'host',
 			type: 'string' as NodePropertyTypes,
-			default: 'localhost',
+			default: 'localhost'
 		},
 		{
 			displayName: 'Database',
 			name: 'database',
 			type: 'string' as NodePropertyTypes,
 			default: '',
+			description:
+				'Note: the database should still be provided even if using an override connection string'
 		},
 		{
 			displayName: 'User',
 			name: 'user',
 			type: 'string' as NodePropertyTypes,
-			default: '',
+			default: ''
 		},
 		{
 			displayName: 'Password',
 			name: 'password',
 			type: 'string' as NodePropertyTypes,
 			typeOptions: {
-				password: true,
+				password: true
 			},
-			default: '',
+			default: ''
 		},
 		{
 			displayName: 'Port',
 			name: 'port',
 			type: 'number' as NodePropertyTypes,
-			default: 27017,
+			default: 27017
 		},
 		{
-			displayName: 'User',
-			name: 'user',
-			type: 'string' as NodePropertyTypes,
-			default: '',
+			displayName: 'Override conn string',
+			name: 'shouldOverrideConnString',
+			type: 'boolean' as NodePropertyTypes,
+			default: false,
+			required: false,
+			description:
+				'Whether to override the generated connection string. Credentials will also be ignored in this case.'
 		},
 		{
 			displayName: 'Conn string override',
 			name: 'connStringOverrideVal',
-			type: 'string'  as NodePropertyTypes,
+			type: 'string' as NodePropertyTypes,
 			typeOptions: {
 				rows: 1
 			},
